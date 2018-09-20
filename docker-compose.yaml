@@ -127,6 +127,7 @@ services:
       - NODE_KEY=38daa89f4277a657e297acd05d305a1934bea7ae9b2a11648925e94d3c9ab945
       - CRUX_PUB=vEq9Lr2EP4HhFB5NK2W5mwUqd3F6TzHAG5kmi6jR+Fo=
       - CRUX_PRIV={"data":{"bytes":"dxgDrRo2bC9yLT6cIY9S3h2K64sPktFE8+nZkdkNpJA="},"type":"unlocked"}
+      - PORT=9000
       - OWN_URL=node6
       - GETH_PORT=21000
       - GETH_RPC_PORT=22000
@@ -148,6 +149,7 @@ services:
       - NODE_KEY=9d264ec2e296e75be4ad88c183053ec845d29bb569a15a7a26493df8383e5fc7
       - CRUX_PUB=kN7tziu9ZocQuc3bFTxzzjCer1mEdg0EWN1iNbxdrmk=
       - CRUX_PRIV={"data":{"bytes":"oRyXIXR+xrrrBLGehf3J80VTC3IV9C6SNQqXQFvRfDQ="},"type":"unlocked"}
+      - PORT=9000
       - OWN_URL=node7
       - GETH_PORT=21000
       - GETH_RPC_PORT=22000
@@ -169,6 +171,7 @@ services:
       - NODE_KEY=ffa1a32b28ba5905beb740bc348de2e643856d5f8c21052a191cd4c82162a24c
       - CRUX_PUB=mSBnnIDnLmfix1ZvnC/rx9by16IJkQPEAvnr6W+KfxI=
       - CRUX_PRIV={"data":{"bytes":"rbawDdRzQPt+ITgO/v4cOSw/jyFG+Z1yXWVv/CQBgJs="},"type":"unlocked"}
+      - PORT=9000
       - OWN_URL=node8
       - GETH_PORT=21000
       - GETH_RPC_PORT=22000
@@ -190,6 +193,7 @@ services:
       - NODE_KEY=85b44365956ee4e37b17403aefbd72cd61c734b3f24133b043e5313a78179fb1
       - CRUX_PUB=+UHpAHHkk1mifcff+eX3rVHPojq1IIai5PecbVXzDnI=
       - CRUX_PRIV={"data":{"bytes":"1mQwh1mO0ck+D6vWrELrpoWCqMEEbdruIC4iAoUyMhs="},"type":"unlocked"}
+      - PORT=9000
       - OWN_URL=node9
       - GETH_PORT=21000
       - GETH_RPC_PORT=22000
@@ -211,6 +215,7 @@ services:
       - NODE_KEY=07010cff92c4ac5cbf15ea516164a013bff31166a16a374f1aab0d3a4c84d703
       - CRUX_PUB=8eC+QgmudkF6E4KldP+iA0+eFrvigOVOiwdqTqU3Bwc=
       - CRUX_PRIV={"data":{"bytes":"BgZAc0XiEvWx2unwzUkECEJTvKuWowYxBmo/nkag53Q="},"type":"unlocked"}
+      - PORT=9000
       - OWN_URL=node10
       - GETH_PORT=21000
       - GETH_RPC_PORT=22000
