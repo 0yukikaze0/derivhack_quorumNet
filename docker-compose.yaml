@@ -1,0 +1,226 @@
+version: "3.4"
+services:
+
+  node1: &quorum_crux_node
+    image: yukikaze/quorum-crux:1.0.0
+    container_name: admin
+    ports:
+      - 22001:22000
+      - 21001:21000
+      - 9001:9000
+    restart: always
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.11
+    environment:
+      - GETH_KEY={"address":"ed9d02e382b34818e88b88a309c7fe71e65f419d","crypto":{"cipher":"aes-128-ctr","ciphertext":"4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377","cipherparams":{"iv":"a8932af2a3c0225ee8e872bc0e462c11"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"8ca49552b3e92f79c51f2cd3d38dfc723412c212e702bd337a3724e8937aff0f"},"mac":"6d1354fef5aa0418389b1a5d1f5ee0050d7273292a1171c51fd02f9ecff55264"},"id":"a65d1ac3-db7e-445d-a1cc-b6c5eeaa05e0","version":3}
+      - NODE_KEY=633b2ef3ed5306f05a532eb44eb84858aca470d4fde039c1c988088e48070e64
+      - CRUX_PUB=BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=
+      - CRUX_PRIV={"data":{"bytes":"Wl+xSyXVuuqzpvznOS7dOobhcn4C5auxkFRi7yLtgtA="},"type":"unlocked"}
+      - PORT=9000
+      - OWN_URL=node1
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node2:9000/
+      - PERMISSIONED_NODES=["enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0","enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0","enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0","enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0"]
+
+  node2:
+    <<: *quorum_crux_node
+    container_name: ccp
+    ports:
+      - 22002:22000
+      - 21002:21000
+      - 9002:9000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.12
+    environment:
+      - GETH_KEY={"address":"ca843569e3427144cead5e4d5999a3d0ccf92b8e","crypto":{"cipher":"aes-128-ctr","ciphertext":"01d409941ce57b83a18597058033657182ffb10ae15d7d0906b8a8c04c8d1e3a","cipherparams":{"iv":"0bfb6eadbe0ab7ffaac7e1be285fb4e5"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"7b90f455a95942c7c682e0ef080afc2b494ef71e749ba5b384700ecbe6f4a1bf"},"mac":"4cc851f9349972f851d03d75a96383a37557f7c0055763c673e922de55e9e307"},"id":"354e3b35-1fed-407d-a358-889a29111211","version":3}
+      - NODE_KEY=d5b8dfced693dbb7bf858dce40e3b2a0373696ac88ccf5e1c0052e26b7d77e49
+      - CRUX_PUB=QfeDAys9MPDs2XHExtc84jKGHxZg/aj52DTh0vtA3Xc=
+      - CRUX_PRIV={"data":{"bytes":"nDFwJNHSiT1gNzKBy9WJvMhmYRkW3TzFUmPsNzR6oFk="},"type":"unlocked"}
+      - PORT=9000
+      - OWN_URL=node2
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node3:9000/
+      - PERMISSIONED_NODES=["enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0","enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0","enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0","enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0"]
+
+  node3:
+    <<: *quorum_crux_node
+    container_name: dealer1
+    ports:
+      - 22003:22000
+      - 9003:9000
+      - 21003:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.13
+    environment:
+      - GETH_KEY={"address":"0fbdc686b912d7722dc86510934589e0aaf3b55a","crypto":{"cipher":"aes-128-ctr","ciphertext":"6b2c72c6793f3da8185e36536e02f574805e41c18f551f24b58346ef4ecf3640","cipherparams":{"iv":"582f27a739f39580410faa108d5cc59f"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"1a79b0db3f8cb5c2ae4fa6ccb2b5917ce446bd5e42c8d61faeee512b97b4ad4a"},"mac":"cecb44d2797d6946805d5d744ff803805477195fab1d2209eddc3d1158f2e403"},"id":"f7292e90-af71-49af-a5b3-40e8493f4681","version":3}
+      - NODE_KEY=45d87820ad7792f86592a8e3494c3e78b4755a480cfad1799d6c3f28c3f0d87c
+      - CRUX_PUB=1iTZde/ndBHvzhcl7V68x44Vx7pl8nwx9LqnM/AfJUg=
+      - CRUX_PRIV={"data":{"bytes":"tMxUVR8bX7aq/TbpVHc2QV3SN2iUuExBwefAuFsO0Lg="},"type":"unlocked"}
+      - PORT=9000
+      - OWN_URL=node3
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node4:9000/
+      - PERMISSIONED_NODES=["enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0","enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0","enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0","enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0"]
+
+  node4:
+    <<: *quorum_crux_node
+    container_name: dealer2
+    ports:
+      - 22004:22000
+      - 9004:9000
+      - 21004:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.14
+    environment:
+      - GETH_KEY={"address":"9186eb3d20cbd1f5f992a950d808c4495153abd5","crypto":{"cipher":"aes-128-ctr","ciphertext":"d160a630a39be3ff35556055406d8ff2a635f0535fe298d62ccc812d8f7b3bd5","cipherparams":{"iv":"82fce06bc6e1658a5e81ccef3b753329"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"8d0c486db4c942721f4f5e96d48e9344805d101dad8159962b8a2008ac718548"},"mac":"4a92bda949068968d470320260ae1a825aa22f6a40fb8567c9f91d700c3f7e91"},"id":"bdb3b4f6-d8d0-4b00-8473-e223ef371b5c","version":3}
+      - NODE_KEY=daa89d4ae250d24b33847343d0cc0116c48331b81e28514522bb7f77f2be5676
+      - CRUX_PUB=oNspPPgszVUFw0qmGFfWwh1uxVUXgvBxleXORHj07g8=
+      - CRUX_PRIV={"data":{"bytes":"grQjd3dBp4qFs8/5Jdq7xjz++aUx/LXAqISFyPWaCRw="},"type":"unlocked"}
+      - PORT=9000
+      - OWN_URL=node4
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node1:9000/
+      - PERMISSIONED_NODES=["enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0","enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0","enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0","enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0"]
+  
+  node5:
+    <<: *quorum_crux_node
+    container_name: dealer3
+    ports:
+      - 22005:22000
+      - 9005:9000
+      - 21005:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.15
+    environment:
+      - GETH_KEY={"address":"698065ad81318219e49f111d12721f10e5cfbff1","crypto":{"cipher":"aes-128-ctr","ciphertext":"b81bb799e4c6d2d7d4d868b4931e83af3a4b7b589c3d6001fdaa237e39d01f4b","cipherparams":{"iv":"033e4803bac765344ab8463ea0132f4e"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"16587980c48888952c8f299736e9ebc9d11d73413bc1bc8ccffd5612db71c30a"},"mac":"79a7b37e9018f93544ed9f26d296f022e68ab8395ddef9176d0536f99c1d3f21"},"id":"0f7b4bc9-d05f-4027-bf28-d8fd0a900ef0","version":3} 
+      - NODE_KEY=1da4cff18f754e4fe2ef4331f75e753a51fc3e5f29dcbb1fda8873877d2f462b
+      - CRUX_PUB=JsbbQyLVZvWWLcjhHSzMa7belKHnmC1xgF19uJ0jvSA=
+      - CRUX_PRIV={"data":{"bytes":"51epz0n6PPGsOj4TiQUu1+4BWxByMDOZSYxUBS9wWlI="},"type":"unlocked"}
+      - PORT=9000
+      - OWN_URL=node5
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node4:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+  node6:
+    <<: *quorum_crux_node
+    container_name: client1
+    ports:
+      - 22006:22000
+      - 9006:9000
+      - 21006:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.16
+    environment:
+      - GETH_KEY={"address":"6493eea6aa71cf2b32fa93c38eed932fe1840a2b","crypto":{"cipher":"aes-128-ctr","ciphertext":"8e114b8e1d2c1c50f451e61e474a9a135edb59ba5d755b53575f183a84cc6e02","cipherparams":{"iv":"3121ef5a62626975421e62e3f781e18d"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"5731726c1951b2037be5be8f4951f41232c91d345c6fdc0be39c4eab6baae25a"},"mac":"37c19508e83f39195e75b6a29dd8ce36ad01aa0809ab264f046d217b83709547"},"id":"35973b2d-ad5a-4908-9495-eb5f3b5d9c59","version":3}
+      - NODE_KEY=38daa89f4277a657e297acd05d305a1934bea7ae9b2a11648925e94d3c9ab945
+      - CRUX_PUB=vEq9Lr2EP4HhFB5NK2W5mwUqd3F6TzHAG5kmi6jR+Fo=
+      - CRUX_PRIV={"data":{"bytes":"dxgDrRo2bC9yLT6cIY9S3h2K64sPktFE8+nZkdkNpJA="},"type":"unlocked"}
+      - OWN_URL=node6
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node5:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+  node7:
+    <<: *quorum_crux_node
+    container_name: client2
+    ports:
+      - 22007:22000
+      - 9007:9000
+      - 21007:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.17
+    environment:
+      - GETH_KEY={"address":"34d51cb93d93af81c27fd0fea4c924561c830e63","crypto":{"cipher":"aes-128-ctr","ciphertext":"060f07de3927917777b58649a236549d212b7445d88a8350a45a6cf1f1da0b9b","cipherparams":{"iv":"f55aa58e0d32d3b40537cff66f8c725c"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"a07e8a25af45d4c5e05893ee65a6399e707a6f1b190432277c936403be2c0b4d"},"mac":"dc04e287e8217138d18f481f9cac764e5a12d5567c33717103981212944c95e8"},"id":"c890e58c-1774-4a70-8210-5ce6cc94248f","version":3} 
+      - NODE_KEY=9d264ec2e296e75be4ad88c183053ec845d29bb569a15a7a26493df8383e5fc7
+      - CRUX_PUB=kN7tziu9ZocQuc3bFTxzzjCer1mEdg0EWN1iNbxdrmk=
+      - CRUX_PRIV={"data":{"bytes":"oRyXIXR+xrrrBLGehf3J80VTC3IV9C6SNQqXQFvRfDQ="},"type":"unlocked"}
+      - OWN_URL=node7
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node6:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+  node8:
+    <<: *quorum_crux_node
+    container_name: client3
+    ports:
+      - 22008:22000
+      - 9008:9000
+      - 21008:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.18
+    environment:
+      - GETH_KEY={"address":"73dd2bd815f3394de0f3a69df7fd48b06412eb3b","crypto":{"cipher":"aes-128-ctr","ciphertext":"73399c8b7ea0df8b81594334fdd2f3bed1274ea0fac24c97c046a1e6d808371f","cipherparams":{"iv":"a4affb5a643c25e052a2762b470f51cd"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"06fed7b56da9a9bc841107e6527bf15daf0422dc6e9d685a406f66f5bab62f8f"},"mac":"df4512113927083865080e9fa533e0eaac44c8e392dc9d8852383db360967a15"},"id":"2964766d-c29f-4d9d-ad69-63989bca94b4","version":3}
+      - NODE_KEY=ffa1a32b28ba5905beb740bc348de2e643856d5f8c21052a191cd4c82162a24c
+      - CRUX_PUB=mSBnnIDnLmfix1ZvnC/rx9by16IJkQPEAvnr6W+KfxI=
+      - CRUX_PRIV={"data":{"bytes":"rbawDdRzQPt+ITgO/v4cOSw/jyFG+Z1yXWVv/CQBgJs="},"type":"unlocked"}
+      - OWN_URL=node8
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node7:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+  node9:
+    <<: *quorum_crux_node
+    container_name: client4
+    ports:
+      - 22009:22000
+      - 9009:9000
+      - 21009:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.19
+    environment:
+      - GETH_KEY={"address":"091a9acba71dcfed5cc92fb4f69e544a756389ff","crypto":{"cipher":"aes-128-ctr","ciphertext":"4e9172cdfb692dfef096ed4b3b4a82ebef396b1f0f7d94515359d9bdcd68add9","cipherparams":{"iv":"527e7c24ce9b21137868ec0e7f5de05e"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"64a10bde0fead3bc43d6fb11bdbc4882a17ec11bbc4b1ecf6ef0ecf8d813f13a"},"mac":"ada28056f024016faed672eaeecdfe30c08a4401e85d2a6dc2c540e3a8928a6c"},"id":"0e4e73c5-a37f-4add-b42c-2dc9ff805ca5","version":3} 
+      - NODE_KEY=85b44365956ee4e37b17403aefbd72cd61c734b3f24133b043e5313a78179fb1
+      - CRUX_PUB=+UHpAHHkk1mifcff+eX3rVHPojq1IIai5PecbVXzDnI=
+      - CRUX_PRIV={"data":{"bytes":"1mQwh1mO0ck+D6vWrELrpoWCqMEEbdruIC4iAoUyMhs="},"type":"unlocked"}
+      - OWN_URL=node9
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node8:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+  node10:
+    <<: *quorum_crux_node
+    container_name: client5
+    ports:
+      - 22010:22000
+      - 9010:9000
+      - 21010:21000
+    networks:
+      quorum_net:
+        ipv4_address: 10.5.0.20
+    environment:
+      - GETH_KEY={"address":"0c6d7e33c4a9886bf7dc84f916a7e1c28df6c53c","crypto":{"cipher":"aes-128-ctr","ciphertext":"597d7cfb3cfba4f5dada1debd0919fc5c65d99c9d3a5eeb65f1cb16ea68125cf","cipherparams":{"iv":"a89951b04c32fc9fbc9556b0b52cd978"},"kdf":"pbkdf2","kdfparams":{"c":262144,"dklen":32,"prf":"hmac-sha256","salt":"88159fdd4cc05874157a23c839b2da2afe328f67005c7996e08a2627f9029e1d"},"mac":"265415285d3c6ea67129a3d42f19efd6ac5a9c8d9a9ec9730512eb7d1807c70c"},"id":"4d109606-d282-479b-bb54-40aff6194766","version":3} 
+      - NODE_KEY=07010cff92c4ac5cbf15ea516164a013bff31166a16a374f1aab0d3a4c84d703
+      - CRUX_PUB=8eC+QgmudkF6E4KldP+iA0+eFrvigOVOiwdqTqU3Bwc=
+      - CRUX_PRIV={"data":{"bytes":"BgZAc0XiEvWx2unwzUkECEJTvKuWowYxBmo/nkag53Q="},"type":"unlocked"}
+      - OWN_URL=node10
+      - GETH_PORT=21000
+      - GETH_RPC_PORT=22000
+      - OTHER_NODES=http://node9:9000/
+      - PERMISSIONED_NODES=[ "enode://5c3c98e3a28a87e73ab40468212de7ab6cf0e2afa77781295925f32369c00baf30f664e52f8d152c02b069d6daa1a61f477e3c1eca64403529dfbd0c31e09524@10.5.0.11:21000?discport=0", "enode://9b98a96a8ba080ff4c7863e5fdf3211a7082b612d5897ae4eed687eec391eb421c8ed7c572ca17f257441a0cb544a7c184244dfdf9a114f5251da3dac72e7585@10.5.0.12:21000?discport=0", "enode://a51690b44ab39fd83c42b5a7c087ba222970951f06655ebbba1625267fad105fd238c9f092e05b2293f526e748b2fa423b22d66296f770037393c26a9e5d3543@10.5.0.13:21000?discport=0", "enode://a68df7cd75e9ea490653bdba7c6868f979944578e59c9efd2aa62878822f16f46a49a13289f6392923053be1acb3a6ec8e2fc92cae59de859fd5892071fbfa88@10.5.0.14:21000?discport=0", "enode://810b5cf5450863c7c07f9cab1a6b006777ba0fc1f760b9fb41eb422ac88032010cc3e4577ae8f00ff1e20aee05f61920fa3b812b7b8c0845dc70acb05147db32@10.5.0.15:21000?discport=0", "enode://441bb9f0b72994b3b51f670fe64f77d3ee629035aecb5cb9b43b22b0ec87a492df4a83b3b585a3953bcae155527518a8bd6b8e2350888c21c4b3ada2bedcb807@10.5.0.16:21000?discport=0", "enode://fd9c13e6a03eef3b01c754b4ec6601beec2fa159305e8f87b4d993e46e918ee15375add2ebf4bcb9d6ff90b75e3084ed337dfc82fe2849aa680a42345ac390ea@10.5.0.17:21000?discport=0", "enode://c464c016b09e79d9d2157e23157ea431238c03213f1c2420d0b481409af96a87ccd5669364c827d09632bd62a49fc99c4b74171d8757d32a9497f43d2f140aee@10.5.0.18:21000?discport=0", "enode://f6df9498ff42cca82e436ef1e56964fa84e86d1c3a95e20fce9e1e2667aca03b8a3a759101f910e9a1dba07579bff3c866d131bf866f4a574de8e0b1b0af5b2c@10.5.0.19:21000?discport=0", "enode://7276d655f3e9522b031cbcfe266c5337e13573e688c73e5f90839044593afbf4f6fce193b36202d54235d612ce0be382a9f989f6a8de7460af4a92a0006f6613@10.5.0.20:21000?discport=0" ]
+
+networks:
+  quorum_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.5.0.0/24
